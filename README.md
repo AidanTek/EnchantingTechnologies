@@ -1,4 +1,6 @@
 # EnchantingTechnologies
 Repository for Fab-Cre8 Enchanting Technologies
 
-See the WiKi for some tutorials on the hardware we are using to prototype.
+Some quick guides are included at this top level - these will be moved to the WiKi section at some point
+
+Find some usage examples in the Arduino Examples folder
