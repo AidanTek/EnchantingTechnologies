@@ -8,6 +8,8 @@ If you have already installed Teensyduino and the associated libraries, you will
 
 ### Calibration
 
+If you are using one of the Fab-Cre8 Teensy boards with Prop Shield attached, the chances are that I have already calibrated it, so there is no need to do it again.
+
 The accelerometer will not be calibrated initially and there are some tools available to help get more accurate readings. There are instructions on the [Prop Shield store page](https://www.pjrc.com/store/prop_shield.html) to achieve this, it requires an additional app to be installed called MotionCal.
 
 Once you have installed the MotionCal app, open the Arduino IDE and open the sketch under **File>Examples>NXPMotionsense>CalibrateSensors**. Upload the sketch and check the Serial Monitor to make sure that the sensor is sending data. 
@@ -36,8 +38,17 @@ Only do this if you are missing the same library.
 
 ---
 
+### Notes on use
 
-If you are using one of the Fab-Cre8 Teensy boards, the chances are that I have already calibrated it, so there is no need to do it again.
+I've found the accelerometer to be surprisingly accurate, but not without problems. It seems to be prone to what I would describe as "drift" where the absolute value is gradually changing constantly. I think this is down to temperature stability and also quite possibly the fact that a speaker is in close proximity (it is all based on magnetism after all!)
 
+Absolute direction is good but not perfect, be aware of this - a more meticulous approach to calibration might improve things, but the accelerometer will still work very well for gestures like:
 
+* Any movement at all
+* Sudden change in movement
+* Sudden change in a specific direction, including twists etc.
+
+---
+
+If you encounter any issues with this guide, please let me know and I will update it as soon as possible.
 
