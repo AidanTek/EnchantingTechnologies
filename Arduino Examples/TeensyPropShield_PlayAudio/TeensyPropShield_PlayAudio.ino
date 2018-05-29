@@ -70,7 +70,7 @@ void playRaw(const char *filename) {
 
 void loop() {
   // use the playRaw function with the filename (string) as included argument:
-  playRaw("loop2.raw");
+  playRaw("loop3.raw");
 
   //delay(5000); // The audio library works asyncronously, so it is fine to use a delay here
 }

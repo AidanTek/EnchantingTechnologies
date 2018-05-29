@@ -1,3 +1,14 @@
+/*
+Synthesizer example using the Teensy to produce sound. Two chords are made up by 6 oscillators split into two groups of three.
+Each group sums into a low pass filter, over time the low pass filters are crossfaded with each other. 
+
+I am using the Teensy 3.2 and Prop Shield, but this example should work on its own with the DAC output on the Teensy connected
+directly to an amplifier. I designed the DSP using the Teensy Audio System Design Tool: https://www.pjrc.com/teensy/gui/
+
+Developed as part of the Enchanting Technologies Fab-Cre8 Project
+Sketch by Aidan Taylor 2018
+*/
+
 #include <Audio.h>
 #include <Wire.h>
 #include <SPI.h>
@@ -52,13 +63,13 @@ void setup() {
   
   // Amin chord
   wave1.begin(0.6, 220.0, WAVEFORM_SAWTOOTH); // A3
-  wave2.begin(0.6, 261.63, WAVEFORM_SAWTOOTH); // C4
-  wave3.begin(0.6, 329.63, WAVEFORM_SAWTOOTH); // E4
+  wave2.begin(0.6, 261.626, WAVEFORM_SAWTOOTH); // C4
+  wave3.begin(0.6, 164.814, WAVEFORM_SAWTOOTH); // E3 - lower E
 
   // Amin chord
-  wave4.begin(0.6, 164.81, WAVEFORM_SAWTOOTH); // E3
-  wave5.begin(0.6, 196.00, WAVEFORM_SAWTOOTH); // G3
-  wave6.begin(0.6, 246.94, WAVEFORM_SAWTOOTH); // B3
+  wave4.begin(0.6, 294.665, WAVEFORM_SAWTOOTH); // D4
+  wave5.begin(0.6, 350.228, WAVEFORM_SAWTOOTH); // G4
+  wave6.begin(0.6, 441.0, WAVEFORM_SAWTOOTH); // A4
 
   mix1.gain(0, 0.8);
   mix1.gain(1, 0.8);
@@ -74,8 +85,8 @@ void setup() {
   filter2.frequency(0);
   filter2.resonance(0.8);
 
-  amp1.gain(0.04); // This can get loud!!
-  amp2.gain(0.04); // This can get loud!!
+  amp1.gain(0.1); // This can get loud!!
+  amp2.gain(0.1); // This can get loud!!
   
 }
 
@@ -84,11 +95,11 @@ void loop() {
   for(int i = 120; i < 10000; i++) {
     filter1.frequency(i);
     filter2.frequency(10000-i);
-    delay(10);
+    delay(1);
   }
   for(int i = 10000; i > 120; i--) {
     filter1.frequency(i);
     filter2.frequency(10000-i);
-    delay(10);
+    delay(1);
   }
 }

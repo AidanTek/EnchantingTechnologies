@@ -26,12 +26,12 @@ AudioConnection          patchCord7(mixer2, dac1);
 uint8_t ampEnable = 5; // This pin enables the amplifier when HIGH
 uint8_t flashSelect = 6; // This pin is the flash chip select
 
-#define GRANULAR_MEMORY_SIZE 12800  // enough for 290 ms at 44.1 kHz
+#define GRANULAR_MEMORY_SIZE 25600  // enough for 290 ms x 2 at 44.1 kHz
 int16_t granularMemory[GRANULAR_MEMORY_SIZE];
 
 long mainTimer = 0;
 long granTest = 0;
-int granInt = 8000;
+int granInt = 500;
 long sample2Test = 0;
 int sample2Int = 40000;
 
@@ -59,9 +59,9 @@ void setup() {
   mixer1.gain(0, 0.8); // Sample 1 FX in
   mixer1.gain(1, 0.8); // Sample 2 FX in
 
-  mixer2.gain(0, 0.4); // Sample 1 direct
+  mixer2.gain(0, 0.); // Sample 1 direct
   mixer2.gain(1, 0.); // Sample 2 direct
-  mixer2.gain(2, 0.4); // This is the effect return
+  mixer2.gain(2, 0.8); // This is the effect return
 
   // The granular effect requires memory to operate:
   granular1.begin(granularMemory, GRANULAR_MEMORY_SIZE);
@@ -70,11 +70,10 @@ void setup() {
 
 // A custom function to play first audio file:
 void playRaw1(const char *filename) {
-  Serial.print("Playing file: ");
-  Serial.println(filename);
-
   // only play the sound if it is not already playing:
   if(!playFlashRaw1.isPlaying()) {
+    Serial.print("Playing file: ");
+    Serial.println(filename);
     playFlashRaw1.play(filename);
     delay(5); // short delay for the audio library
   }
@@ -83,11 +82,10 @@ void playRaw1(const char *filename) {
 
 // A custom function to play second audio file:
 void playRaw2(const char *filename) {
-  Serial.print("Playing file: ");
-  Serial.println(filename);
-
   // only play the sound if it is not already playing:
   if(!playFlashRaw2.isPlaying()) {
+    Serial.print("Playing file: ");
+    Serial.println(filename);
     playFlashRaw2.play(filename);
     delay(5); // short delay for the audio library
   }
@@ -97,18 +95,25 @@ void playRaw2(const char *filename) {
 void loop() {
   mainTimer = millis();
   // Start a sample:
-  playRaw1("loop1.raw");
+  playRaw1("loop3.raw");
 
   if((mainTimer - sample2Test) >= sample2Int) {
     sample2Test = millis();
-    playRaw2("loop2.raw");
+    playRaw2("loop3.raw");
   }
 
   // Granulate:
   if((mainTimer - granTest) >= granInt) {
     granTest = millis();
-    granular1.beginFreeze(random(150)+50);
-    granular1.setSpeed(1.0);
+    granular1.beginFreeze(random(530)+50);
+    for(int i = 0; i < 100; i++) {
+      granular1.setSpeed(0.0+(i/100.0));
+      delay(1);
+    }
   }
-
+  delay(800);
+  for(int i = 0; i < 100; i++) {
+      granular1.setSpeed(1.0-(i/100.0));
+      delay(1);
+    }
 }

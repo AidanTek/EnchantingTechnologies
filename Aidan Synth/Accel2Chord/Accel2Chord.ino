@@ -53,8 +53,7 @@ AudioConnection          patchCord13(mix3, dac1);
 // GUItool: end automatically generated code
 
 byte ampEnable = 5;
-
-float lpFreq = 0;
+float semitone = 1.059;
 
 void setup() {
   //Activate Serial Port
@@ -94,8 +93,8 @@ void setup() {
   filter2.frequency(0);
   filter2.resonance(0.8);
 
-  amp1.gain(0.04); // This can get loud!!
-  amp2.gain(0.04); // This can get loud!!
+  amp1.gain(0.2); // This can get loud!!
+  amp2.gain(0.2); // This can get loud!!
 
   imu.begin();
   filter.begin(100);
@@ -105,6 +104,15 @@ void setup() {
 }
 
 void loop() {
+  float lpFreq = 0;
+  float wav1F = 220.00;
+  float wav2F = 261.63;
+  float wav3F = 329.63;
+  float wav4F = 164.81;
+  float wav5F = 196.00;
+  float wav6F = 246.94;
+  float wavMod = 0;
+  
   float ax, ay, az;
   float gx, gy, gz;
   float mx, my, mz;
@@ -121,15 +129,31 @@ void loop() {
     roll = filter.getRoll();
     pitch = filter.getPitch();
     heading = filter.getYaw();
-    Serial.print("Orientation: ");
-    Serial.print(heading);
-    Serial.print(" ");
-    Serial.print(pitch);
-    Serial.print(" ");
-    Serial.println(roll);
+//    Serial.print("Orientation: ");
+//    Serial.print(heading);
+//    Serial.print(" ");
+//    Serial.print(pitch);
+//    Serial.print(" ");
+//    Serial.println(roll);
   }
 
-  lpFreq = map(heading, 0, 360, 120, 10000);
+  // Rectify the heading variable:
+  heading = heading - 180.0;
+  if(heading < 0) {
+    heading = heading*-1.0;
+  }
+  Serial.println(heading);
+
+  lpFreq = map(heading, 0, 180, 120, 10000);
+  wavMod = ((pitch+80.0)/80.0)-1.0;
+  //Serial.println(wavMod);
+
+  wave1.frequency(wav1F+wavMod);
+  wave2.frequency(wav2F+(wavMod*(semitone*3)));
+  wave3.frequency(wav3F+(wavMod*(semitone*7)));
+  wave4.frequency(wav4F+wavMod);
+  wave5.frequency(wav5F+(wavMod*(semitone*3)));
+  wave6.frequency(wav6F+(wavMod*(semitone*7)));
 
   filter1.frequency(lpFreq);
   filter2.frequency(10000-lpFreq);
