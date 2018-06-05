@@ -108,12 +108,12 @@ void loop() {
     granular1.beginFreeze(random(530)+50);
     for(int i = 0; i < 100; i++) {
       granular1.setSpeed(0.0+(i/100.0));
-      delay(1);
+      delay(100);
     }
   }
   delay(800);
   for(int i = 0; i < 100; i++) {
       granular1.setSpeed(1.0-(i/100.0));
-      delay(1);
+      delay(100);
     }
 }
